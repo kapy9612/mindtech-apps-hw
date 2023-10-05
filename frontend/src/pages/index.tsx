@@ -12,19 +12,11 @@ export default function Home() {
     const { replace } = useRouter();
     const { token } = useAuth();
 
-    if (!token) {
-        useEffect(() => {
+    useEffect(() => {
+        if (!token) {
             void replace('/login');
-        }, []);
-        return (
-            <Layout>
-                <Typography variant={'body1'}>
-                    Redirecting...
-                    <CircularProgress size={15} />
-                </Typography>
-            </Layout>
-        );
-    }
+        }
+    }, [token]);
 
     return (
         <Layout>

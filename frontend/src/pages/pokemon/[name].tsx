@@ -2,8 +2,6 @@ import React, { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { CircularProgress, Typography } from '@mui/material';
-
 import DetailsPage from '@/components/DetailsPage/DetailsPage';
 import Layout from '@/components/Layout/Layout';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,19 +13,11 @@ const PokemonPage = () => {
 
     const pokemon = usePokemon(query.name! as string);
 
-    if (!token) {
-        useEffect(() => {
+    useEffect(() => {
+        if (!token) {
             void replace('/login');
-        }, []);
-        return (
-            <Layout>
-                <Typography variant={'body1'}>
-                    Redirecting...
-                    <CircularProgress size={15} />
-                </Typography>
-            </Layout>
-        );
-    }
+        }
+    }, [token]);
 
     return (
         <Layout>
