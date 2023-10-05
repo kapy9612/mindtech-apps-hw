@@ -5,6 +5,6 @@ import { getRequest } from '@/utils/requests';
 export const usePokemon = (name: string | null) => {
     return useSWR<any>(
         () => (!!name ? name : null),
-        () => getRequest(`/pokemon/${name}`),
+        () => getRequest(`https://pokeapi.co/api/v2/pokemon/${name}`),
     );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
@@ -12,14 +13,27 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { useAuth } from '@/hooks/useAuth';
+import { postRequest } from '@/utils/requests';
+
 export default function SignIn() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const { setToken } = useAuth();
+    const { replace } = useRouter();
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        const response: any = await postRequest(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
+            {
+                email: data.get('email'),
+                password: data.get('password'),
+            },
+        );
+        if (response?.access_token) {
+            setToken(response.access_token);
+            replace('/');
+        }
     };
 
     return (

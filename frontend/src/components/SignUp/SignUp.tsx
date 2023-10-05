@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
@@ -12,14 +13,27 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { postRequest } from '@/utils/requests';
+
 export default function SignUp() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const { push } = useRouter();
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        const response: any = await postRequest(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
+            {
+                name: data.get('name'),
+                email: data.get('email'),
+                password: data.get('password'),
+            },
+        );
+
+        if (response) {
+            alert('Registration succesful!');
+            void push('/login');
+        }
     };
 
     return (

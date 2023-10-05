@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class PokemonService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
-  async catch(email: string, pokemon: string): Promise<User> {
+  async catch(token: string, pokemon: string): Promise<User> {
+    const { email }: any = this.jwtService.decode(token);
     return this.prisma.user.update({
       where: {
         email: email,

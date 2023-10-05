@@ -8,6 +8,7 @@ import '@fontsource/roboto/700.css';
 import { ThemeProvider } from '@mui/material';
 import { SWRConfig } from 'swr';
 
+import { AuthProvider } from '@/hooks/useAuth';
 import '@/styles/globals.css';
 import { theme } from '@/styles/theme';
 
@@ -22,15 +23,17 @@ export default function App({ Component, pageProps }: AppProps) {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <SWRConfig
-                value={{
-                    errorRetryCount: 3,
-                }}
-            >
-                <ThemeProvider theme={theme}>
-                    <Component {...pageProps} />
-                </ThemeProvider>
-            </SWRConfig>
+            <AuthProvider>
+                <SWRConfig
+                    value={{
+                        errorRetryCount: 3,
+                    }}
+                >
+                    <ThemeProvider theme={theme}>
+                        <Component {...pageProps} />
+                    </ThemeProvider>
+                </SWRConfig>
+            </AuthProvider>
         </>
     );
 }
